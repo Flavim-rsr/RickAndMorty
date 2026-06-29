@@ -1,10 +1,14 @@
 import { useMemo, useState } from "react";
 import { useCharacters } from "../hooks/useCharacters";
 import { useDebounce } from "../hooks/useDebounce";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import CharacterCard from "../components/CharacterCard";
+import CharacterModal from "../components/CharacterModal";
+import type { Character } from "../types/character";
 
 export default function CharactersPage() {
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Character | null>(null);
   const debouncedSearch = useDebounce(search, 500);
 
   const filters = useMemo(
@@ -22,6 +26,12 @@ export default function CharactersPage() {
   } = useCharacters(filters);
 
   const characters = data?.pages.flatMap((page) => page.results) ?? [];
+
+  // dispara o carregamento automático quando a sentinela entra na tela
+  const loadMoreRef = useInfiniteScroll(
+    fetchNextPage,
+    hasNextPage && !isFetchingNextPage,
+  );
 
   return (
     <div className="mx-auto max-w-6xl p-6">
@@ -52,13 +62,16 @@ export default function CharactersPage() {
       <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {characters.map((character) => (
           <li key={character.id}>
-            <CharacterCard character={character} />
+            <CharacterCard
+              character={character}
+              onClick={() => setSelected(character)}
+            />
           </li>
         ))}
       </ul>
 
       {hasNextPage && (
-        <div className="mt-8 flex justify-center">
+        <div ref={loadMoreRef} className="mt-8 flex justify-center">
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
@@ -67,6 +80,13 @@ export default function CharactersPage() {
             {isFetchingNextPage ? "Carregando..." : "Load More"}
           </button>
         </div>
+      )}
+
+      {selected && (
+        <CharacterModal
+          character={selected}
+          onClose={() => setSelected(null)}
+        />
       )}
     </div>
   );

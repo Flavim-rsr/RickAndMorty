@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import type { Character, Status } from "../types/character";
 
 interface CharacterCardProps {
   character: Character;
+  onClick: () => void;
 }
 
 const statusColor: Record<Status, string> = {
@@ -11,11 +11,14 @@ const statusColor: Record<Status, string> = {
   unknown: "bg-gray-400",
 };
 
-export default function CharacterCard({ character }: CharacterCardProps) {
+export default function CharacterCard({
+  character,
+  onClick,
+}: CharacterCardProps) {
   return (
-    <Link
-      to={`/character/${character.id}`}
-      className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+    <button
+      onClick={onClick}
+      className="group block w-full overflow-hidden rounded-lg border border-gray-200 bg-white text-left shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
     >
       <img
         src={character.image}
@@ -36,6 +39,6 @@ export default function CharacterCard({ character }: CharacterCardProps) {
           </span>
         </div>
       </div>
-    </Link>
+    </button>
   );
 }

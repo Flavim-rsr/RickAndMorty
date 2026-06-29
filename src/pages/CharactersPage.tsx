@@ -5,6 +5,7 @@ import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import CharacterCard from "../components/CharacterCard";
 import CharacterModal from "../components/CharacterModal";
 import Filters from "../components/Filters";
+import logo from "../assets/logo.svg";
 import type { Character } from "../types/character";
 
 export default function CharactersPage() {
@@ -53,38 +54,36 @@ export default function CharactersPage() {
 
   return (
     <div className="mx-auto max-w-6xl p-6">
-      <h1 className="mb-6 text-center text-3xl font-bold">Rick &amp; Morty</h1>
-
-      <input
-        type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Buscar personagem..."
-        className="mb-6 w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800"
+      <img
+        src={logo}
+        alt="Rick and Morty"
+        className="mx-auto mb-8 w-full max-w-sm"
       />
 
       <Filters
+        search={search}
+        onSearchChange={setSearch}
         status={filters.status}
         species={filters.species}
         gender={filters.gender}
         onChange={handleFilterChange}
       />
 
-      {isLoading && <p className="text-center">Carregando...</p>}
+      {isLoading && <p className="text-center">Loading...</p>}
 
       {isError && (
         <p className="text-center text-red-500">
-          Erro ao carregar personagens.
+          Error loading characters.
         </p>
       )}
 
       {!isLoading && !isError && characters.length === 0 && (
         <p className="text-center text-gray-500">
-          Nenhum personagem encontrado.
+          No characters found.
         </p>
       )}
 
-      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+      <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
         {characters.map((character) => (
           <li key={character.id}>
             <CharacterCard
@@ -102,7 +101,7 @@ export default function CharactersPage() {
             disabled={isFetchingNextPage}
             className="rounded-lg border border-gray-300 px-6 py-2 font-medium transition hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800"
           >
-            {isFetchingNextPage ? "Carregando..." : "Load More"}
+            {isFetchingNextPage ? "Loading..." : "Load More"}
           </button>
         </div>
       )}

@@ -67,13 +67,13 @@ export default function CharacterModal({
               to={`/character/${character.id}`}
               className="flex-1 rounded-lg bg-blue-500 px-4 py-2 text-center font-medium text-white transition hover:bg-blue-600"
             >
-              Ver mais
+              View more
             </Link>
             <button
               onClick={onClose}
               className="rounded-lg border border-gray-300 px-4 py-2 font-medium transition hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
             >
-              Fechar
+              Close
             </button>
           </div>
         </div>

@@ -6,6 +6,7 @@ import './index.css'
 import CharactersPage from './pages/CharactersPage'
 import CharacterDetailsPage from './pages/CharacterDetailsPage'
 import NotFoundPage from './pages/NotFoundPage'
+import ThemeToggle from './components/ThemeToggle'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
+                <ThemeToggle />
                 <Routes>
                     <Route path="/" element={<CharactersPage />} />
                     <Route path="/character/:id" element={<CharacterDetailsPage />} />

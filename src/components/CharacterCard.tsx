@@ -24,7 +24,7 @@ export default function CharacterCard({
         src={character.image}
         alt={character.name}
         loading="lazy"
-        className="aspect-square w-full object-cover transition group-hover:scale-105"
+        className="aspect-square w-full bg-gray-100 object-cover transition group-hover:scale-105 dark:bg-gray-700"
       />
       <div className="p-3">
         <h2 className="truncate font-bold text-gray-900 dark:text-gray-100">

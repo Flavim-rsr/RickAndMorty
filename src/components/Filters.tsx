@@ -84,7 +84,7 @@ export default function Filters({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Filter by name..."
-          className="h-14 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800"
+          className="h-14 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 

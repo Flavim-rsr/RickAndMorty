@@ -1,4 +1,4 @@
-# Rick and Morty — Character Browser
+# Rick and Morty
 
 Aplicação web para consulta de personagens da série **Rick and Morty**, consumindo a [API pública Rick and Morty](https://rickandmortyapi.com/). Permite listar, buscar, filtrar, favoritar e ver detalhes de cada personagem.
 

@@ -12,23 +12,23 @@ Aplicação web para consulta de personagens da série **Rick and Morty**, consu
 
 ### Obrigatórias
 - ✅ Listagem de personagens (nome, foto, espécie e status)
-- ✅ Busca por nome (com _debounce_)
-- ✅ Filtros por status e espécie (+ gênero como extra)
+- ✅ Busca por nome
+- ✅ Filtros por status, espécie e gênero
 - ✅ Página de detalhes (nome, imagem, espécie, gênero, origem, localização atual e quantidade de episódios)
 - ✅ Estados de **Loading**, **Erro** e **Lista vazia**
 
 ### Diferenciais implementados
-- ✅ **Paginação** (navegação por páginas Previous / Next, carregando ~20 personagens por vez)
-- ✅ **Tema Dark / Light** (com persistência no `localStorage`)
+- ✅ **Paginação** 
+- ✅ **Tema Dark / Light**
 - ✅ **Responsividade** (mobile, tablet e desktop)
-- ✅ **Favoritos com LocalStorage** (+ filtro "Favorites only")
-- ✅ **React Query** (cache e gerenciamento das requisições)
+- ✅ **Favoritos com LocalStorage**
+- ✅ **React Query**
 - ✅ **TypeScript**
 - ✅ **React Router** (página de detalhes + página 404 personalizada)
-- ✅ **Axios** (cliente HTTP centralizado)
+- ✅ **Axios**
 - ✅ **Testes automatizados** (Vitest + Testing Library)
 - ✅ **Deploy** (Vercel)
-- ✅ **Modal de preview** (prévia rápida do personagem antes de abrir os detalhes)
+- ✅ **Modal de preview**
 
 ---
 
@@ -37,7 +37,7 @@ Aplicação web para consulta de personagens da série **Rick and Morty**, consu
 | Tecnologia | Por que foi usada |
 |---|---|
 | **React + Vite** | Vite oferece build e dev server rápidos; React para a UI em componentes |
-| **TypeScript** | Tipagem estática — menos bugs e melhor autocomplete |
+| **TypeScript** | Tipagem estática  menos bugs e melhor autocomplete |
 | **Tailwind CSS** | Estilização rápida via classes utilitárias, com suporte nativo a dark mode |
 | **TanStack React Query** | Cache, _refetch_ e estados de loading/erro das requisições sem código repetitivo |
 | **Axios** | Cliente HTTP com instância centralizada e tratamento de erros (ex: 404) |

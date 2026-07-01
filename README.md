@@ -1,75 +1,114 @@
-# React + TypeScript + Vite
+# Rick and Morty — Character Browser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web para consulta de personagens da série **Rick and Morty**, consumindo a [API pública Rick and Morty](https://rickandmortyapi.com/). Permite listar, buscar, filtrar, favoritar e ver detalhes de cada personagem.
 
-Currently, two official plugins are available:
+🔗 **Aplicação publicada:** [rickandmortyflavio.vercel.app](https://rickandmortyflavio.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Screenshot da aplicação](docs/screenshot.png)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Funcionalidades
 
-## Expanding the ESLint configuration
+### Obrigatórias
+- ✅ Listagem de personagens (nome, foto, espécie e status)
+- ✅ Busca por nome (com _debounce_)
+- ✅ Filtros por status e espécie (+ gênero como extra)
+- ✅ Página de detalhes (nome, imagem, espécie, gênero, origem, localização atual e quantidade de episódios)
+- ✅ Estados de **Loading**, **Erro** e **Lista vazia**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Diferenciais implementados
+- ✅ **Paginação** (navegação por páginas Previous / Next, carregando ~20 personagens por vez)
+- ✅ **Tema Dark / Light** (com persistência no `localStorage`)
+- ✅ **Responsividade** (mobile, tablet e desktop)
+- ✅ **Favoritos com LocalStorage** (+ filtro "Favorites only")
+- ✅ **React Query** (cache e gerenciamento das requisições)
+- ✅ **TypeScript**
+- ✅ **React Router** (página de detalhes + página 404 personalizada)
+- ✅ **Axios** (cliente HTTP centralizado)
+- ✅ **Testes automatizados** (Vitest + Testing Library)
+- ✅ **Deploy** (Vercel)
+- ✅ **Modal de preview** (prévia rápida do personagem antes de abrir os detalhes)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tecnologias
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Tecnologia | Por que foi usada |
+|---|---|
+| **React + Vite** | Vite oferece build e dev server rápidos; React para a UI em componentes |
+| **TypeScript** | Tipagem estática — menos bugs e melhor autocomplete |
+| **Tailwind CSS** | Estilização rápida via classes utilitárias, com suporte nativo a dark mode |
+| **TanStack React Query** | Cache, _refetch_ e estados de loading/erro das requisições sem código repetitivo |
+| **Axios** | Cliente HTTP com instância centralizada e tratamento de erros (ex: 404) |
+| **React Router** | Navegação entre a lista, os detalhes e a página 404 |
+| **lucide-react** | Biblioteca de ícones leve (busca, coração, setas, tema) |
+| **Vitest + Testing Library** | Testes unitários e de componente, integrados ao Vite |
 
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📁 Estrutura de pastas
 
 ```
+src/
+├── assets/        # imagens (logo)
+├── components/    # componentes reutilizáveis (Card, Modal, Filtros, etc.)
+├── hooks/         # hooks customizados (useCharacters, useFavorites, useTheme...)
+├── pages/         # páginas (lista, detalhes, 404)
+├── services/      # comunicação com a API (axios)
+├── test/          # configuração dos testes
+├── types/         # tipos do TypeScript
+├── utils/         # utilitários
+└── styles/        # estilos globais
+```
+
+---
+
+## 🚀 Como executar localmente
+
+**Pré-requisitos:** [Node.js](https://nodejs.org/) 18+ instalado.
+
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/Flavim-rsr/RickAndMorty.git
+cd RickAndMorty
+
+# 2. Instalar as dependências
+npm install
+
+# 3. Rodar em modo de desenvolvimento
+npm run dev
+```
+
+A aplicação abre em `http://localhost:5173`.
+
+### Outros comandos
+
+```bash
+npm run build     # gera a build de produção
+npm run preview   # serve a build de produção localmente
+npm run lint      # roda o ESLint
+npm test          # roda os testes (modo watch)
+npx vitest run    # roda os testes uma vez
+```
+
+---
+
+## 🧪 Testes
+
+Os testes cobrem as duas pontas da aplicação:
+
+- **Lógica** — `useFavorites` (adicionar/remover favoritos)
+- **Componente** — `CharacterCard` (renderização do nome/status e clique no coração)
+
+```bash
+npx vitest run
+```
+
+---
+
+## ☁️ Deploy
+
+O projeto está publicado na **Vercel** com deploy automático a cada push na branch `main`.
+
+🔗 **[rickandmortyflavio.vercel.app](https://rickandmortyflavio.vercel.app/)**

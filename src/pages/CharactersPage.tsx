@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
-import { Heart } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCharacters } from "../hooks/useCharacters";
 import { useDebounce } from "../hooks/useDebounce";
-import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import { useFavorites } from "../hooks/useFavorites";
+import { useFavoriteCharacters } from "../hooks/useFavoriteCharacters";
 import CharacterCard from "../components/CharacterCard";
 import CharacterModal from "../components/CharacterModal";
 import Filters from "../components/Filters";
@@ -17,10 +17,11 @@ export default function CharactersPage() {
     species: "",
     gender: "",
   });
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Character | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const debouncedSearch = useDebounce(search, 500);
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   const handleFilterChange = (
     key: "status" | "species" | "gender",
@@ -39,27 +40,33 @@ export default function CharactersPage() {
     [debouncedSearch, filters],
   );
 
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useCharacters(queryFilters);
+  // ao mudar busca ou filtros, volta pra primeira página
+  useEffect(() => {
+    setPage(1);
+  }, [queryFilters]);
 
-  const characters = data?.pages.flatMap((page) => page.results) ?? [];
+  // ao trocar de página, rola a tela de volta pro topo
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
-  // quando o filtro de favoritos está ativo, mostra só os já carregados que são favoritos
-  const visibleCharacters = showFavoritesOnly
-    ? characters.filter((character) => isFavorite(character.id))
-    : characters;
-
-  // dispara o carregamento automático quando a sentinela entra na tela
-  const loadMoreRef = useInfiniteScroll(
-    fetchNextPage,
-    hasNextPage && !isFetchingNextPage,
+  const { data, isLoading, isError, isFetching } = useCharacters(
+    page,
+    queryFilters,
   );
+
+  // busca todos os favoritos por id (só quando o filtro "Favorites only" está ativo)
+  const favoritesQuery = useFavoriteCharacters(
+    showFavoritesOnly ? favorites : [],
+  );
+
+  const characters = showFavoritesOnly
+    ? favoritesQuery.data ?? []
+    : data?.results ?? [];
+
+  const loading = showFavoritesOnly ? favoritesQuery.isLoading : isLoading;
+  const error = showFavoritesOnly ? favoritesQuery.isError : isError;
+  const totalPages = data?.info.pages ?? 0;
 
   return (
     <div className="mx-auto max-w-6xl p-6">
@@ -95,28 +102,22 @@ export default function CharactersPage() {
         </button>
       </div>
 
-      {isLoading && <p className="text-center">Loading...</p>}
+      {loading && <p className="text-center">Loading...</p>}
 
-      {isError && (
+      {error && (
         <p className="text-center text-red-500">
           Error loading characters.
         </p>
       )}
 
-      {!isLoading && !isError && characters.length === 0 && (
+      {!loading && !error && characters.length === 0 && (
         <p className="text-center text-gray-500">
-          No characters found.
-        </p>
-      )}
-
-      {!isLoading && showFavoritesOnly && visibleCharacters.length === 0 && (
-        <p className="text-center text-gray-500">
-          No favorites yet.
+          {showFavoritesOnly ? "No favorites yet." : "No characters found."}
         </p>
       )}
 
       <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
-        {visibleCharacters.map((character) => (
+        {characters.map((character) => (
           <li key={character.id}>
             <CharacterCard
               character={character}
@@ -128,14 +129,28 @@ export default function CharactersPage() {
         ))}
       </ul>
 
-      {hasNextPage && !showFavoritesOnly && (
-        <div ref={loadMoreRef} className="mt-8 flex justify-center">
+      {!showFavoritesOnly && totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center gap-4">
           <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            className="rounded-lg border border-gray-300 px-6 py-2 font-medium transition hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800"
+            onClick={() => setPage((prev) => prev - 1)}
+            disabled={page === 1 || isFetching}
+            className="flex items-center gap-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium transition hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:hover:bg-gray-800"
           >
-            {isFetchingNextPage ? "Loading..." : "Load More"}
+            <ChevronLeft size={16} />
+            Previous
+          </button>
+
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page === totalPages || isFetching}
+            className="flex items-center gap-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium transition hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:hover:bg-gray-800"
+          >
+            Next
+            <ChevronRight size={16} />
           </button>
         </div>
       )}

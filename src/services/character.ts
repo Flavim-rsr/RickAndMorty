@@ -35,3 +35,12 @@ export async function getCharacterById(
   const { data } = await api.get<Character>(`/character/${id}`);
   return data;
 }
+
+export async function getCharactersByIds(
+  ids: number[],
+): Promise<Character[]> {
+  if (ids.length === 0) return [];
+  const { data } = await api.get<Character | Character[]>(`/character/${ids}`);
+  // a API devolve um objeto único quando há só 1 id; normalizamos pra array
+  return Array.isArray(data) ? data : [data];
+}

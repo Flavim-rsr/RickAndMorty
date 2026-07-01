@@ -64,6 +64,12 @@ src/
 
 ---
 
+## 🎨 Design
+
+O layout foi inspirado no protótipo da comunidade do Figma **[Rick and Morty — web responsive](https://www.figma.com/design/sEwqp5Crg1ucSg5iuzC7An/Rick-and-Morty--web-responsive---Community-?node-id=20-110)**, usado como referência para a interface e a paleta de cores.
+
+---
+
 ## 🚀 Como executar localmente
 
 **Pré-requisitos:** [Node.js](https://nodejs.org/) 18+ instalado.
